@@ -26,8 +26,6 @@ public class Register {
         }else if(retCode == 1){
             response = Utility.constructJSON("register",false, "You are already registered");
         }else if(retCode == 2){
-            response = Utility.constructJSON("register",false, "Special Characters are not allowed in Username and Password");
-        }else if(retCode == 3){
             response = Utility.constructJSON("register",false, "Error occured");
         }
         return response;
@@ -35,7 +33,7 @@ public class Register {
     }
  
     private int registerUser(String name, String uname, String pwd){
-        int result = 3;
+        int result = 2;
         if(Utility.isNotNull(uname) && Utility.isNotNull(pwd)){
             try {
                 if(DBConnection.insertUser(name, uname, pwd)){
@@ -43,21 +41,15 @@ public class Register {
                 }
             } catch(SQLException sqle){
                 //When Primary key violation occurs that means user is already registered
-                if(sqle.getErrorCode() == 1062){
+                if(sqle.getMessage().contains("UNIQUE constraint failed")){
                     result = 1;
-                } 
-                //When special characters are used in name,username or password
-                else if(sqle.getErrorCode() == 1064){
-                    System.out.println(sqle.getErrorCode());
-                    result = 2;
                 }
-                sqle.printStackTrace();
             }
             catch (Exception e) {
-                result = 3;
+                result = 2;
             }
         }else{
-            result = 3;
+            result = 2;
         }
  
         return result;

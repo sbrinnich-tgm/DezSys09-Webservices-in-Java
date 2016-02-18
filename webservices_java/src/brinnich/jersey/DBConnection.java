@@ -23,7 +23,6 @@ public class DBConnection {
     		String fullPath = URLDecoder.decode(path, "UTF-8");
     		c = DriverManager.getConnection("jdbc:sqlite:"+fullPath+"../database/"+"users.db");
     	} catch ( Exception e ) {
-    		System.err.println( e.getClass().getName() + ": " + e.getMessage() );
     		System.exit(0);
     	}finally {
     		return c;
